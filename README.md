@@ -61,6 +61,8 @@ args.cuda = args.use_cuda and torch.cuda.is_available()
 
 ## References
 
+Deng, L. et al. Scale-adaptive deep model for bacterial raman spectra identification. IEEE J. Biomed. Health Inform. 26(1), 369-378 (2022) .
+
 Gu, J. et al. Conformal prediction based on raman spectra for the classification of chinese liquors. Appl. Spectrosc. 73 (7), 759-766 (2019) .
 
 Liu, J. et al. Deep convolutional neural networks for raman spectrum recognition: a unified solution. Analyst 142 (21), 4067-4074 (2017) .
