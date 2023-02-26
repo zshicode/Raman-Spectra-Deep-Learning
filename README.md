@@ -65,6 +65,8 @@ Deng, L. et al. Scale-adaptive deep model for bacterial raman spectra identifica
 
 Gu, J. et al. Conformal prediction based on raman spectra for the classification of chinese liquors. Appl. Spectrosc. 73 (7), 759-766 (2019) .
 
+Ho. C. et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat. Commun. 10, 4927 (2019) .
+
 Liu, J. et al. Deep convolutional neural networks for raman spectrum recognition: a unified solution. Analyst 142 (21), 4067-4074 (2017) .
 
 Liu, J. et al. Dynamic spectrum matching with one-shot learning. Chemometr. Intel. Lab. Sys. 184, 175-181 (2019) .
