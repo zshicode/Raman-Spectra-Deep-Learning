@@ -1,6 +1,6 @@
-# PyTorch implementation of CNN and LSTM for Raman spectrum recognition
+# PyTorch implementation of deep learning for Raman spectrum recognition
 
-Deep learning has been widely applied for Raman spectroscopy. This repo contributes PyTorch implementation of vanilla CNN and LSTM for Raman spectrum recognition (Liu et al., 2017; Yu et al., 2021).
+Deep learning has been widely applied for Raman spectroscopy. This repository contributes PyTorch implementation of vanilla CNN and LSTM for Raman spectrum recognition (Liu et al., 2017; Yu et al., 2021). On this basis, this repository adopts two novel deep learning models: (1) graph neural networks (GNN) (2) contrastive learning, for Raman spectrum recognition.
 
 ## Requirements
 
@@ -18,6 +18,10 @@ sklearn==0.21.3
 ```bash
 python main.py --c 2 --model LSTM
 ```
+
+Parameter `model` can be one of these four models: CNN, LSTM, GCN, CLR.
+
+GNN is implemented as graph convolutional networks (GCN) (Kipf et al., 2017) with spectral angle for graph construction. Contrastive learning model is implemented as SimCLR with maximum mean discrepancy (Chen et al., 2020; Zhang et al., 2022).
 
 ## Datasets
 
@@ -61,12 +65,22 @@ args.cuda = args.use_cuda and torch.cuda.is_available()
 
 ## References
 
-Gu, J. et al. Conformal prediction based on raman spectra for the classification of chinese liquors. Appl. Spectrosc. 73 (7), 759-766 (2019) .
+Chen et al. A simple framework for contrastive learning of visual representations. ICML. 2020
 
-Liu, J. et al. Deep convolutional neural networks for raman spectrum recognition: a unified solution. Analyst 142 (21), 4067-4074 (2017) .
+Deng et al. Scale-adaptive deep model for bacterial raman spectra identification. IEEE JBHI. 2022
 
-Liu, J. et al. Dynamic spectrum matching with one-shot learning. Chemometr. Intel. Lab. Sys. 184, 175-181 (2019) .
+Gu et al. Conformal prediction based on raman spectra for the classification of chinese liquors. Appl. Spectrosc. 2019
 
-Yu, S. et al. Analysis of raman spectra by using deep learning methods in the identification of marine pathogens. Anal. Chem. 93 (32), 11089-11098 (2021) .
+Ho et al. Rapid identification of pathogenic bacteria using Raman spectroscopy and deep learning. Nat. Commun. 2019
 
-Zhong, N. et al. Accurate prediction of salmon storage time using improved raman spectroscopy. J. Food Eng. 293, 110378 (2021) .
+Kipf et al. Semi-supervised classification with graph convolutional networks. ICLR. 2017
+
+Liu et al. Deep convolutional neural networks for raman spectrum recognition: a unified solution. Analyst. 2017
+
+Liu et al. Dynamic spectrum matching with one-shot learning. Chemometr. Intel. Lab. Sys. 2019
+
+Yu et al. Analysis of raman spectra by using deep learning methods in the identification of marine pathogens. Anal. Chem. 2021
+
+Zhang et al. Divide and Contrast: Source-free Domain Adaptation via Adaptive Contrastive Learning. NeurIPS. 2022
+
+Zhong et al. Accurate prediction of salmon storage time using improved raman spectroscopy. J. Food Eng. 2021
