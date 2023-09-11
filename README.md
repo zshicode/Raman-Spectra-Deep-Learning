@@ -56,7 +56,7 @@ parser.add_argument('--c', type=int, default=2,
                     help='Num of classes')
 parser.add_argument('--d', type=int, default=1200,
                     help='Num of spectra dimension')
-parser.add_argument('--model', type=str, default='CNN',
+parser.add_argument('--model', type=str, default='CLR',
                     help='Model')                    
 
 args = parser.parse_args()
