@@ -7,6 +7,7 @@ import torch.nn.functional as F
 from sklearn.metrics import recall_score,precision_score,f1_score,accuracy_score
 from sklearn.model_selection import KFold
 from utils import *
+from transformer import TransformerBlock
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--use-cuda', default=False,
@@ -63,7 +64,7 @@ class CNNNet(nn.Module):
         x = self.conv(x)
         x = x.squeeze()
         x = self.lin(x)
-        x = F.sigmoid(x) 
+        x = torch.sigmoid(x) 
         return x
 
 class LSTMNet(nn.Module):
@@ -80,10 +81,32 @@ class LSTMNet(nn.Module):
         self.lin = nn.Linear(args.hidden,args.c)
     
     def forward(self,x):
-        x = F.tanh(self.conv1(x)[0])
-        x = F.tanh(self.conv2(x)[0])
+        x = torch.tanh(self.conv1(x)[0])
+        x = torch.tanh(self.conv2(x)[0])
         x = x.squeeze()
-        x = F.sigmoid(self.lin(x))
+        x = torch.sigmoid(self.lin(x))
+        return x
+
+class Transformer(nn.Module):
+    def __init__(self):
+        super(Transformer,self).__init__()
+        self.lstm = nn.LSTM(
+            input_size=args.d,
+            hidden_size=args.hidden,
+        )
+        self.t = TransformerBlock(
+            hidden=args.hidden, 
+            attn_heads=4, 
+            feed_forward_hidden=args.hidden, 
+            dropout=0.1
+        )
+        self.lin = nn.Linear(args.hidden,args.c)
+    
+    def forward(self,x):
+        x = torch.tanh(self.lstm(x)[0])
+        x = self.t(x,mask=None)
+        x = x.squeeze()
+        x = torch.sigmoid(self.lin(x))
         return x
 
 class GraphConv(nn.Module):
@@ -111,7 +134,7 @@ class GNet(nn.Module):
     def __init__(self,in_dim=args.d,out_dim=args.c,hid_dim=args.hidden,bias=False):
         super(GNet,self).__init__()
         self.res1 = GraphConv(in_dim,hid_dim,bias=bias,activation=F.relu)
-        self.res2 = GraphConv(hid_dim,out_dim,bias=bias,activation=F.sigmoid)
+        self.res2 = GraphConv(hid_dim,out_dim,bias=bias,activation=torch.sigmoid)
     
     def forward(self,g,z):
         h = self.res1(g,z)          
@@ -148,6 +171,7 @@ y = v[:,-1]
 def classifier(tid,vid,tag=1):
     if args.model == 'CNN': clf = CNNNet()
     elif args.model == 'LSTM': clf = LSTMNet()
+    elif args.model == 'Transformer': clf = Transformer()
     else: clf = CLR()
     opt = torch.optim.Adam(clf.parameters(),lr=args.lr,weight_decay=args.wd)
     xt = torch.from_numpy(x[tid]).float().unsqueeze(1)

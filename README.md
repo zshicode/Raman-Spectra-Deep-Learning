@@ -1,6 +1,6 @@
 # PyTorch implementation of deep learning for Raman spectrum recognition
 
-Deep learning has been widely applied for Raman spectroscopy. This repository contributes PyTorch implementation of vanilla CNN and LSTM for Raman spectrum recognition (Liu et al., 2017; Yu et al., 2021). On this basis, this repository adopts two novel deep learning models: (1) graph neural networks (GNN) (2) contrastive learning, for Raman spectrum recognition.
+Deep learning has been widely applied for Raman spectroscopy. This repository contributes PyTorch implementation of vanilla CNN and LSTM for Raman spectrum recognition (Liu et al., 2017; Yu et al., 2021). On this basis, this repository adopts three novel deep learning models: (1) Transformer (2) graph neural networks (GNN) (3) contrastive learning, for Raman spectrum recognition.
 
 ## Requirements
 
@@ -19,7 +19,7 @@ sklearn==0.21.3
 python main.py --c 2 --model LSTM
 ```
 
-Parameter `model` can be one of these four models: CNN, LSTM, GCN, CLR.
+Parameter `model` can be one of these models: CNN, LSTM, Transformer, GCN, CLR.
 
 GNN is implemented as graph convolutional networks (GCN) (Kipf et al., 2017) with spectral angle for graph construction. Contrastive learning model is implemented as SimCLR with maximum mean discrepancy (Chen et al., 2020; Zhang et al., 2022).
 
