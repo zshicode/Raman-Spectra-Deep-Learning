@@ -8,6 +8,7 @@ from sklearn.metrics import recall_score,precision_score,f1_score,accuracy_score
 from sklearn.model_selection import KFold
 from utils import *
 from transformer import TransformerBlock
+from mamba import Mamba, MambaConfig
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--use-cuda', default=False,
@@ -163,6 +164,22 @@ class CLR(CNNNet):
         else:
             return x1
 
+class MambaNet(nn.Module):
+    def __init__(self,in_dim):
+        super().__init__()
+        self.mamba_dim = 16
+        self.config = MambaConfig(d_model=self.mamba_dim, n_layers=2)
+        self.mamba = nn.Sequential(
+            nn.Linear(in_dim,self.mamba_dim),
+            Mamba(self.config),
+            nn.Linear(self.mamba_dim,args.c),
+            nn.Sigmoid()
+        )
+    
+    def forward(self,x):
+        x = self.mamba(x)
+        return x.squeeze(0)
+
 if args.c == 2: v = pd.read_csv('bin.csv').values
 else: v = pd.read_csv('multi.csv').values
 x = v[:,:args.d]
@@ -172,10 +189,16 @@ def classifier(tid,vid,tag=1):
     if args.model == 'CNN': clf = CNNNet()
     elif args.model == 'LSTM': clf = LSTMNet()
     elif args.model == 'Transformer': clf = Transformer()
+    elif args.model == 'Mamba': clf = MambaNet(len(x[0]))
     else: clf = CLR()
     opt = torch.optim.Adam(clf.parameters(),lr=args.lr,weight_decay=args.wd)
-    xt = torch.from_numpy(x[tid]).float().unsqueeze(1)
-    xv = torch.from_numpy(x[vid]).float().unsqueeze(1)
+    if args.model == 'Mamba':
+        xt = torch.from_numpy(x[tid]).float().unsqueeze(0)
+        xv = torch.from_numpy(x[vid]).float().unsqueeze(0)
+    else:
+        xt = torch.from_numpy(x[tid]).float().unsqueeze(1)
+        xv = torch.from_numpy(x[vid]).float().unsqueeze(1)
+    
     yt = torch.LongTensor(y[tid])
     yv = y[vid]
     if args.model == 'CLR':
