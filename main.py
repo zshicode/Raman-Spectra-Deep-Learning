@@ -192,13 +192,8 @@ def classifier(tid,vid,tag=1):
     elif args.model == 'Mamba': clf = MambaNet(len(x[0]))
     else: clf = CLR()
     opt = torch.optim.Adam(clf.parameters(),lr=args.lr,weight_decay=args.wd)
-    if args.model == 'Mamba':
-        xt = torch.from_numpy(x[tid]).float().unsqueeze(0)
-        xv = torch.from_numpy(x[vid]).float().unsqueeze(0)
-    else:
-        xt = torch.from_numpy(x[tid]).float().unsqueeze(1)
-        xv = torch.from_numpy(x[vid]).float().unsqueeze(1)
-    
+    xt = torch.from_numpy(x[tid]).float().unsqueeze(1)
+    xv = torch.from_numpy(x[vid]).float().unsqueeze(1)
     yt = torch.LongTensor(y[tid])
     yv = y[vid]
     if args.model == 'CLR':
