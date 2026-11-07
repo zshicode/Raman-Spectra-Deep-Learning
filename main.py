@@ -65,7 +65,6 @@ class CNNNet(nn.Module):
         x = self.conv(x)
         x = x.squeeze()
         x = self.lin(x)
-        x = torch.sigmoid(x) 
         return x
 
 class LSTMNet(nn.Module):
@@ -85,7 +84,7 @@ class LSTMNet(nn.Module):
         x = torch.tanh(self.conv1(x)[0])
         x = torch.tanh(self.conv2(x)[0])
         x = x.squeeze()
-        x = torch.sigmoid(self.lin(x))
+        x = self.lin(x)
         return x
 
 class Transformer(nn.Module):
@@ -107,7 +106,7 @@ class Transformer(nn.Module):
         x = torch.tanh(self.lstm(x)[0])
         x = self.t(x,mask=None)
         x = x.squeeze()
-        x = torch.sigmoid(self.lin(x))
+        x = self.lin(x)
         return x
 
 class GraphConv(nn.Module):
@@ -135,7 +134,7 @@ class GNet(nn.Module):
     def __init__(self,in_dim=args.d,out_dim=args.c,hid_dim=args.hidden,bias=False):
         super(GNet,self).__init__()
         self.res1 = GraphConv(in_dim,hid_dim,bias=bias,activation=F.relu)
-        self.res2 = GraphConv(hid_dim,out_dim,bias=bias,activation=torch.sigmoid)
+        self.res2 = GraphConv(hid_dim,out_dim,bias=bias,activation=None)
     
     def forward(self,g,z):
         h = self.res1(g,z)          
@@ -172,8 +171,7 @@ class MambaNet(nn.Module):
         self.mamba = nn.Sequential(
             nn.Linear(in_dim,self.mamba_dim),
             Mamba(self.config),
-            nn.Linear(self.mamba_dim,args.c),
-            nn.Sigmoid()
+            nn.Linear(self.mamba_dim,args.c)
         )
     
     def forward(self,x):
